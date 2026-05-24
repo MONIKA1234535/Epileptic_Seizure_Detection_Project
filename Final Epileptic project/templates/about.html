@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Our Healthcare Project</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #2a3a7c, #3a4a8c);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background elements */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .brain-wave {
+            position: absolute;
+            width: 200px;
+            height: 100px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: wave 8s infinite linear;
+        }
+
+        .brain-wave:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .brain-wave:nth-child(2) {
+            top: 70%;
+            left: 80%;
+            animation-delay: 2s;
+        }
+
+        .brain-wave:nth-child(3) {
+            top: 40%;
+            left: 60%;
+            animation-delay: 4s;
+        }
+
+        .brain-wave:nth-child(4) {
+            top: 80%;
+            left: 20%;
+            animation-delay: 6s;
+        }
+
+        @keyframes wave {
+            0% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.5); opacity: 0.1; }
+            100% { transform: scale(1); opacity: 0.3; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .content-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-card {
+            background: rgba(52, 152, 219, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-card p {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .tech-item {
+            background: #e1f0fa;
+            color: #2c3e50;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .btn-back {
+            display: inline-block;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+            background: linear-gradient(135deg, #2980b9, #3498db);
+        }
+
+        .icon {
+            font-size: 1.2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .content-container {
+                padding: 25px;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.9rem;
+            }
+            
+            .content-container {
+                padding: 20px;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <div class="brain-wave"></div>
+        <div class="brain-wave"></div>
+        <div class="brain-wave"></div>
+        <div class="brain-wave"></div>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>About Our Healthcare Project</h1>
+            <p class="subtitle">Advanced EEG Analysis for Seizure Detection and Emotion Recognition</p>
+        </div>
+        
+        <div class="content-container">
+            <div class="section">
+                <h2>Project Overview</h2>
+                <p>Our Healthcare Project is an innovative web application that leverages cutting-edge machine learning to analyze Electroencephalography (EEG) signals for two critical purposes: detecting epileptic seizures and recognizing emotional states.</p>
+                <p>By combining deep learning models with medical data analysis, we provide healthcare professionals and patients with valuable insights into brain activity patterns that could indicate neurological conditions or emotional states.</p>
+            </div>
+            
+            <div class="section">
+                <h2>Key Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3><span class="icon">⚡</span> Seizure Detection</h3>
+                        <p>Our system analyzes EEG signal features from multiple brain regions to identify patterns associated with epileptic seizures using a hybrid CNN-RNN model.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3><span class="icon">😊</span> Emotion Recognition</h3>
+                        <p>By examining brainwave intensities and entropy across different frequency bands, our deep neural network can classify emotional states with high accuracy.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3><span class="icon">🔐</span> Secure User System</h3>
+                        <p>User registration and authentication system with password hashing ensures that sensitive medical data remains protected and accessible only to authorized users.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3><span class="icon">📊</span> Advanced Analytics</h3>
+                        <p>Our models incorporate sophisticated feature engineering including wave intensity ratios, entropy calculations, and PCA transformation for optimal performance.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>How It Works</h2>
+                <p>The application processes EEG data through a multi-stage pipeline:</p>
+                <p><strong>1. Data Preprocessing:</strong> Raw EEG signals are normalized and scaled using specialized scalers trained on medical data.</p>
+                <p><strong>2. Feature Extraction:</strong> Key characteristics like power distributions across delta, theta, alpha, beta, and gamma waves are extracted.</p>
+                <p><strong>3. Model Prediction:</strong> Pre-trained deep learning models analyze the features to generate predictions for seizures or emotional states.</p>
+                <p><strong>4. Result Interpretation:</strong> Clear, actionable results are presented to help users understand the analysis outcomes.</p>
+            </div>
+            
+            <div class="section">
+                <h2>Technology Stack</h2>
+                <div class="tech-stack">
+                    <span class="tech-item">Flask</span>
+                    <span class="tech-item">TensorFlow/Keras</span>
+                    <span class="tech-item">SQLite</span>
+                    <span class="tech-item">Scikit-learn</span>
+                    <span class="tech-item">Pandas</span>
+                    <span class="tech-item">NumPy</span>
+                    <span class="tech-item">HTML/CSS/JavaScript</span>
+                    <span class="tech-item">Joblib</span>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Medical Applications</h2>
+                <p>This technology has significant potential in clinical settings:</p>
+                <p>• <strong>Early seizure detection</strong> for epilepsy patients</p>
+                <p>• <strong>Emotional state monitoring</strong> for mental health assessment</p>
+                <p>• <strong>Neurological research</strong> and data analysis</p>
+                <p>• <strong>Remote patient monitoring</strong> through accessible web interface</p>
+            </div>
+            
+            <center>
+                <a href="{{ url_for('index') }}" class="btn-back">Back to Home</a>
+            </center>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EEG Seizure Detection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #2a3a7c, #3a4a8c);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-size: 0.95rem;
+        }
+
+        input {
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+            background: linear-gradient(135deg, #2980b9, #3498db);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        .result {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .normal {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+
+        .seizure {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.9);
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin-top: 25px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+        }
+
+        .info-box h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .back-link a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .form-container {
+                padding: 15px;
+            }
+            
+            button {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Epileptic Seizure Detection</h2>
+            <p class="subtitle">Enter EEG signal features to analyze seizure probability</p>
+        </div>
+        
+        <div class="form-container">
+            <form method="POST">
+                <div class="form-grid">
+                    {% for feat in features %}
+                    <div class="form-group">
+                        <label for="{{ feat }}">{{ feat }}</label>
+                        <input type="text" id="{{ feat }}" name="{{ feat }}" required>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="btn-container">
+                    <button type="submit">Analyze EEG Data</button>
+                </div>
+            </form>
+            
+            <div class="info-box">
+                <h3>About EEG Seizure Detection</h3>
+                <p>This system analyzes electroencephalography (EEG) signal features to detect patterns associated with epileptic seizures. Enter the feature values from your EEG recording to get a prediction.</p>
+            </div>
+        </div>
+
+{% if prediction %}
+<div class="result {% if 'Non-Seizure' in prediction %}normal{% else %}seizure{% endif %}">
+    <strong>{{ prediction }}</strong>
+</div>
+{% endif %}
+
+
+        
+        <div class="back-link">
+            <a href="{{ url_for('index') }}">← Back to Main Menu</a>
+        </div>
+    </div>
+</body>
+</html>

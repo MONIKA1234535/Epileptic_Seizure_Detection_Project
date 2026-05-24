@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Epilepsy Chatbot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .container {
+            display: flex;
+            height: 100vh;
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        /* Sidebar Styling */
+        .sidebar {
+            width: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .home-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 114, 255, 0.3);
+            text-decoration: none;
+        }
+        
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 114, 255, 0.4);
+        }
+        
+        .suggestions {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .suggestions h3 {
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #f0f8ff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .suggestion {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .suggestion:hover {
+            background: rgba(0, 198, 255, 0.3);
+            transform: translateX(5px);
+        }
+        
+        /* Chat Container Styling */
+        .chat-container {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .chat-header h2 {
+            font-weight: 600;
+            font-size: 24px;
+            color: #f0f8ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .chat-box {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        /* Custom scrollbar */
+        .chat-box::-webkit-scrollbar,
+        .suggestions::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-box::-webkit-scrollbar-track,
+        .suggestions::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .chat-box::-webkit-scrollbar-thumb,
+        .suggestions::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+        
+        .user, .bot {
+            margin: 0;
+            padding: 12px 16px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+            line-height: 1.4;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .bot {
+            background: rgba(255, 255, 255, 0.15);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .input-area {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        
+        input {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 30px;
+            border: none;
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 0 2px rgba(0, 198, 255, 0.5);
+        }
+        
+        button {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 114, 255, 0.3);
+            min-width: 80px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 114, 255, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        /* Typing indicator */
+        .typing {
+            display: inline-block;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+            border-bottom-left-radius: 5px;
+            align-self: flex-start;
+        }
+        
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding: 15px;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 200px;
+            }
+            
+            .suggestions {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .suggestion {
+                flex: 1;
+                min-width: 45%;
+                margin: 0;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar with Quick Questions -->
+        <div class="sidebar">
+            <a href="{{ url_for('index') }}" class="home-btn">
+                <span>🏠</span> Home
+            </a>
+            
+            <div class="suggestions">
+                <h3>💡 Quick Questions</h3>
+                <div class="suggestion" onclick="fillInput(this.innerText)">what is epilepsy</div>
+                <div class="suggestion" onclick="fillInput(this.innerText)">types of seizures</div>
+                <div class="suggestion" onclick="fillInput(this.innerText)">how to prevent seizures</div>
+                <div class="suggestion" onclick="fillInput(this.innerText)">is epilepsy genetic</div>
+                <div class="suggestion" onclick="fillInput(this.innerText)">can epilepsy cause death</div>
+                <div class="suggestion" onclick="fillInput(this.innerText)">how to manage epilepsy daily</div>
+                <div class="suggestion" onclick="fillInput(this.innerText)">triggers of seizures</div>
+                <div class="suggestion" onclick="fillInput(this.innerText)">what are emotional effects of epilepsy</div>
+                <div class="suggestion" onclick="fillInput(this.innerText)">can mobile phones cause epilepsy</div>
+                <div class="suggestion" onclick="fillInput(this.innerText)">is epilepsy disability</div>
+            </div>
+        </div>
+        
+        <!-- Main Chat Container -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <h2>💬 Epilepsy Assistant</h2>
+            </div>
+            
+            <div class="chat-box" id="chatBox">
+                <div class="bot">Hello! I'm your epilepsy assistant. Ask me anything about seizures, treatments, or managing epilepsy. You can use the quick questions on the left or type your own question.</div>
+            </div>
+            
+            <div class="input-area">
+                <input type="text" id="userInput" placeholder="Type your question here..." onkeypress="handleKeyPress(event)" />
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sends user message to backend
+        async function sendMessage() {
+            const input = document.getElementById("userInput");
+            const chatBox = document.getElementById("chatBox");
+            const userText = input.value.trim();
+            if (userText === "") return;
+
+            // Add user message
+            const userDiv = document.createElement("div");
+            userDiv.classList.add("user");
+            userDiv.textContent = userText;
+            chatBox.appendChild(userDiv);
+
+            input.value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Show typing indicator
+            const typingDiv = document.createElement("div");
+            typingDiv.classList.add("typing");
+            typingDiv.innerHTML = `
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            chatBox.appendChild(typingDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                // Simulate API call (replace with your actual endpoint)
+                const response = await fetch("/chatbot", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: userText })
+                });
+                
+                // Remove typing indicator
+                chatBox.removeChild(typingDiv);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Add bot response
+                    const botDiv = document.createElement("div");
+                    botDiv.classList.add("bot");
+                    botDiv.textContent = data.response;
+                    chatBox.appendChild(botDiv);
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            } catch (error) {
+                // Remove typing indicator
+                chatBox.removeChild(typingDiv);
+                
+                // Show error message
+                const botDiv = document.createElement("div");
+                botDiv.classList.add("bot");
+                botDiv.textContent = "I'm having trouble connecting right now. Please try again shortly.";
+                chatBox.appendChild(botDiv);
+            }
+            
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Fills input box when clicking suggestion
+        function fillInput(text) {
+            document.getElementById("userInput").value = text;
+            document.getElementById("userInput").focus();
+        }
+
+        // Handle Enter key press
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>
